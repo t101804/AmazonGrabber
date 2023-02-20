@@ -4,7 +4,21 @@
 you can see the vidio in the link below <a href="https://youtu.be/XQsfFhR4jek">Youtube Vidio</a>
 Each results is different ( the results will generate randomly from our database ) 
 
+# Support For :wrench:
+- Windows 
+- Linux
+- Termux ( not tested but shouldly work ) 
 
+## How To Use 
+```
+set your apikey first in .apikey
+after that you should run in cmd to avoid force close if having error
+
+linux : 
+$ ./awsgrab
+windows : 
+$ awsgrab.exe
+```
 ## Detail API
 <p>fixed free api endpoints : http://20.213.60.227:1338/grab/amazonaws.com/total/10 ( Limited Requests )
 
