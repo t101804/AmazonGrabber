@@ -95,9 +95,9 @@ func parser(data string) error {
 }
 
 func apikey() string {
-	apiKey, err := os.ReadFile(".apikey")
+	apiKey, err := os.ReadFile("yourapikey.txt")
 	if err != nil {
-		fmt.Printf("Error reading .apikey file: %v\n", err)
+		fmt.Printf("Error reading yourapikey file: %v\n", err)
 		os.Exit(1)
 	}
 	return string(apiKey)
@@ -130,30 +130,31 @@ func main() {
 	if err != nil {
 		fmt.Println(err)
 	}
+
 	// Create a WaitGroup to synchronize the goroutines
 	var wg sync.WaitGroup
 	wg.Add(numRequests)
 	start := time.Now()
 	// Start the requests in goroutines
 	for i := 0; i < numRequests; i++ {
-		go func() {
-			// Make the HTTP request to the api
-			transport := &http.Transport{TLSClientConfig: &tls.Config{InsecureSkipVerify: true}}
-			client := httpclient.NewClient(httpclient.WithHTTPClient(&myHTTPClient{client: http.Client{Transport: transport}}))
-			site := fmt.Sprintf("http://20.213.60.227:1338/vipgrab/amazonaws.com/total/%s", results)
-			req, err := http.NewRequest("GET", site, nil)
+		// Make the HTTP request to the api
+		transport := &http.Transport{TLSClientConfig: &tls.Config{InsecureSkipVerify: true}}
+		client := httpclient.NewClient(httpclient.WithHTTPClient(&myHTTPClient{client: http.Client{Transport: transport}}))
+		site := fmt.Sprintf("http://20.213.60.227:1338/vipgrab/amazonaws.com/total/%s", results)
+		req, err := http.NewRequest("GET", site, nil)
+		if err != nil {
+			log.Fatal(err)
+		}
+		req.Header.Add("X-Api-Key", apikey())
+		resp, err := client.Do(req)
+		if err != nil {
+			fmt.Printf("Error fetching api : %s\n", err.Error())
+		} else {
+			body, err := io.ReadAll(resp.Body)
 			if err != nil {
-				log.Fatal(err)
+				fmt.Println(err)
 			}
-			req.Header.Add("X-Api-Key", apikey())
-			resp, err := client.Do(req)
-			if err != nil {
-				fmt.Printf("Error fetching api : %s\n", err.Error())
-			} else {
-				body, err := io.ReadAll(resp.Body)
-				if err != nil {
-					fmt.Println(err)
-				}
+			go func() {
 				if !strings.Contains(string(body), "Authentication") {
 					fmt.Printf("Fetched http://20.213.60.227:1338/vipgrab/amazonaws.com/total/%s\n", results)
 					err := parser(string(body))
@@ -164,12 +165,13 @@ func main() {
 				} else {
 					fmt.Println("Buy VIP To Use Mass Scrapping of AWS ")
 				}
+				wg.Done()
+			}()
 
-			}
+		}
 
-			// Notify the WaitGroup that the request is complete
-			wg.Done()
-		}()
+		// Notify the WaitGroup that the request is complete
+
 	}
 
 	// Wait for all requests to complete
