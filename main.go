@@ -140,7 +140,7 @@ func main() {
 		// Make the HTTP request to the api
 		transport := &http.Transport{TLSClientConfig: &tls.Config{InsecureSkipVerify: true}}
 		client := httpclient.NewClient(httpclient.WithHTTPClient(&myHTTPClient{client: http.Client{Transport: transport}}))
-		site := fmt.Sprintf("http://20.213.60.227:1338/vipgrab/amazonaws.com/total/%s", results)
+		site := fmt.Sprintf("http://20.198.216.96:1338/vipgrab/amazonaws.com/total/%s", results)
 		req, err := http.NewRequest("GET", site, nil)
 		if err != nil {
 			log.Fatal(err)
@@ -156,7 +156,7 @@ func main() {
 			}
 			go func() {
 				if !strings.Contains(string(body), "Authentication") {
-					fmt.Printf("Fetched http://20.213.60.227:1338/vipgrab/amazonaws.com/total/%s\n", results)
+					fmt.Printf("Fetched http://20.198.216.96:1338/vipgrab/amazonaws.com/total/%s\n", results)
 					err := parser(string(body))
 					if err != nil {
 						log.Fatal(err)
