@@ -14,9 +14,11 @@ set your apikey first in .apikey
 after that you should run in cmd to avoid force close if having error
 
 linux : 
-$ ./awsgrab
+$ chmod +x yourapikey.txt
+$ chmod +x main
+$ ./main
 windows : 
-$ awsgrab.exe
+$ main.exe
 ```
 ## Detail API
 <p>fixed free api endpoints : http://20.213.60.227:1338/grab/amazonaws.com/total/10 ( Limited Requests )

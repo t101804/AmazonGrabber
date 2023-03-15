@@ -130,7 +130,7 @@ func main() {
 	if err != nil {
 		fmt.Println(err)
 	}
-
+	validateApiKey := strings.ReplaceAll(apikey() , "\n" , "")
 	// Create a WaitGroup to synchronize the goroutines
 	var wg sync.WaitGroup
 	wg.Add(numRequests)
@@ -145,7 +145,7 @@ func main() {
 		if err != nil {
 			log.Fatal(err)
 		}
-		req.Header.Add("X-Api-Key", apikey())
+		req.Header.Add("X-Api-Key", validateApiKey)
 		resp, err := client.Do(req)
 		if err != nil {
 			fmt.Printf("Error fetching api : %s\n", err.Error())
