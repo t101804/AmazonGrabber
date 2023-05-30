@@ -1,6 +1,7 @@
 // Copyright (c) 2023 By @CallMeRep
 // Buy apikey on telegram directly with me @CallMeRep
-
+//
+//	add update auto customization
 package main
 
 import (
@@ -192,7 +193,7 @@ func main() {
 			}
 			go func() {
 				if !strings.Contains(string(body), "Authentication") {
-					fmt.Printf("Fetched http://20.198.216.96:1338/vipgrab/amazonaws.com/total/%s\n", results)
+					fmt.Printf("Fetched %s%s\n", api_server(), results)
 					err := parser(string(body))
 					if err != nil {
 						log.Fatal(err)
