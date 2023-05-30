@@ -10,18 +10,10 @@ you can see the vidio in the link below <a href="https://youtu.be/XQsfFhR4jek">Y
 
 ## How To Use 
 ```
-set your apikey first in .apikey
-after that you should run in cmd to avoid force close if having error
-
-linux : 
-$ chmod +x yourapikey.txt
-$ chmod +x main
-$ ./main
-windows : 
-$ main.exe
+set the configuration in config.conf set to your apikey and correcxt server configuration
 ```
 ## Detail API
-<p>fixed free api endpoints : http://20.213.60.227:1338/grab/amazonaws.com/total/10 ( Limited Requests )
+<p>fixed free api endpoints : https://repcyber.com/grab/amazonaws.com/total/10 ( Limited Requests )
 
 for vip ( full-access repproject users ) : ( you will get the tools for parse this all result too ) 
-http://20.213.60.227:1338/vipgrab/amazonaws.com/total/1000 ( Unlimited Requests Max is 10k Per Each Requests , you can set the loop  )</p>
+https://repcyber.com/vipgrab/amazonaws.com/total/1000 ( Unlimited Requests Max is 10k Per Each Requests , you can set the loop  )</p>

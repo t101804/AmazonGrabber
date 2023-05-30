@@ -4,6 +4,7 @@
 package main
 
 import (
+	"bufio"
 	"crypto/tls"
 	"fmt"
 	"io"
@@ -95,12 +96,47 @@ func parser(data string) error {
 }
 
 func apikey() string {
-	apiKey, err := os.ReadFile("yourapikey.txt")
+	file, err := os.Open("config.conf")
 	if err != nil {
-		fmt.Printf("Error reading yourapikey file: %v\n", err)
-		os.Exit(1)
+		log.Fatal(err)
 	}
-	return string(apiKey)
+	defer file.Close()
+
+	scanner := bufio.NewScanner(file)
+	for scanner.Scan() {
+		line := scanner.Text()
+		if strings.HasPrefix(line, "your_apikey_token=") {
+			return strings.Split(line, "=")[1]
+		}
+	}
+
+	if err := scanner.Err(); err != nil {
+		log.Fatal(err)
+	}
+
+	return ""
+}
+
+func api_server() string {
+	file, err := os.Open("config.conf")
+	if err != nil {
+		log.Fatal(err)
+	}
+	defer file.Close()
+
+	scanner := bufio.NewScanner(file)
+	for scanner.Scan() {
+		line := scanner.Text()
+		if strings.HasPrefix(line, "server_address=") {
+			return strings.Split(line, "=")[1]
+		}
+	}
+
+	if err := scanner.Err(); err != nil {
+		log.Fatal(err)
+	}
+
+	return ""
 }
 func main() {
 	// Make 10 requests to Google.com
@@ -130,7 +166,7 @@ func main() {
 	if err != nil {
 		fmt.Println(err)
 	}
-	validateApiKey := strings.ReplaceAll(apikey() , "\n" , "")
+	validateApiKey := strings.ReplaceAll(apikey(), "\n", "")
 	// Create a WaitGroup to synchronize the goroutines
 	var wg sync.WaitGroup
 	wg.Add(numRequests)
@@ -140,7 +176,7 @@ func main() {
 		// Make the HTTP request to the api
 		transport := &http.Transport{TLSClientConfig: &tls.Config{InsecureSkipVerify: true}}
 		client := httpclient.NewClient(httpclient.WithHTTPClient(&myHTTPClient{client: http.Client{Transport: transport}}))
-		site := fmt.Sprintf("http://20.198.216.96:1338/vipgrab/amazonaws.com/total/%s", results)
+		site := fmt.Sprintf("%s%s", api_server(), results)
 		req, err := http.NewRequest("GET", site, nil)
 		if err != nil {
 			log.Fatal(err)
